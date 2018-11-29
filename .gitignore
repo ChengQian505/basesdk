@@ -1,0 +1,4 @@
+/build
+*.iml
+src/androidTest/
+src/main/res/values/strings.xml
