@@ -11,8 +11,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.layout_base.view.*
 import kotlinx.android.synthetic.main.layout_title.view.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import xyz.chengqian.basesdk.R
-import xyz.chengqian.basesdk.showinfo.CLog
+import xyz.chengqian.basesdk.bean.event.DefaultEvent
+import xyz.cq.clog.CLog
 
 
 /**
@@ -26,12 +30,12 @@ abstract class BaseFragment : Fragment() {
     /** 是否禁止旋转屏幕  */
     var refreshType = BaseAdapter.REFRESH
         set(value) {
-            field=value
-            when(refreshType){
-                BaseAdapter.REFRESH ->{
-                    page=0
+            field = value
+            when (refreshType) {
+                BaseAdapter.REFRESH -> {
+                    page = 0
                 }
-                BaseAdapter.LOAD_MORE ->{
+                BaseAdapter.LOAD_MORE -> {
                     page++
                 }
             }
@@ -44,7 +48,7 @@ abstract class BaseFragment : Fragment() {
     private fun steepStatusBar() {//[沉浸状态栏]
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // 透明状态栏
-            activity.window.addFlags(
+            activity!!.window.addFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
@@ -64,10 +68,11 @@ abstract class BaseFragment : Fragment() {
             view.title_left_img.visibility = View.GONE
         }
         layoutInflater.inflate(bindLayoutId(), view.layout_base)
+        EventBus.getDefault().register(this)
         if (hasTitle()) {
-            CLog.log(CLog.VIEW).i("${javaClass.name} Create-${view.title_left_text.text}-${view.title_middle_text.text}")//流程统计
+            CLog.log("VIEW").i("${javaClass.name} Create-${view.title_left_text.text}-${view.title_middle_text.text}")//流程统计
         } else {
-            CLog.log(CLog.VIEW).i("${javaClass.name} Create")//流程统计
+            CLog.log("VIEW").i("${javaClass.name} Create")//流程统计
         }
         if (isSetStatusBar) {
             steepStatusBar();
@@ -79,7 +84,7 @@ abstract class BaseFragment : Fragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            CLog.log(CLog.VIEW).i("${javaClass.name} Resume")//流程统计
+            CLog.log("VIEW").i("${javaClass.name} Resume")//流程统计
         }
         lazyLoadDataIfPrepared()
     }
@@ -118,5 +123,13 @@ abstract class BaseFragment : Fragment() {
      */
     abstract fun load()
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    open fun onMessageReceive(message: DefaultEvent) {
+    }
 
 }

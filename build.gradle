@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -13,7 +12,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -27,6 +26,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //eventbus
     implementation 'org.greenrobot:eventbus:3.1.1'
+    //图片加载glide
+    implementation 'com.github.bumptech.glide:glide:4.1.1'
     //retrofit
     implementation 'com.squareup.retrofit2:converter-jackson:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
@@ -35,7 +36,24 @@ dependencies {
     implementation('com.github.ihsanbal:LoggingInterceptor:3.0.0') {
         exclude group: 'org.json', module: 'json'
     }
+    implementation 'xyz.cq.base:clog:1.0.7'
 }
 repositories {
     mavenCentral()
+}
+apply plugin: 'com.novoda.bintray-release'//添加
+//gradlew clean build bintrayUpload -PbintrayUser=chengqian -PbintrayKey=fa90e8a7d75531eb30e090873c7a2ef982060421 -PdryRun=false
+//项目主页
+def siteUrl = 'https://github.com/ChengQian505/basesdk'
+publish{
+    repoName = 'chengqian'//远程仓库名字,不指明，默认是上传到maven
+    userOrg = 'chengqian'//bintray.com的用户名
+    groupId = 'xyz.cq.base'//jcenter上的路径
+    artifactId = 'sdk'//项目名称bintray.apikey=fa90e8a7d75531eb30e090873c7a2ef982060421
+    publishVersion = '1.0.3'//版本号
+    desc = '公用类'//描述，不重要
+    website = siteUrl//项目主页
+}
+tasks.withType(Javadoc).all {
+    enabled = false
 }

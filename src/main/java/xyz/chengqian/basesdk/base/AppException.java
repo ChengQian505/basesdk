@@ -11,7 +11,7 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Date;
 
-import xyz.chengqian.basesdk.showinfo.CLog;
+import xyz.cq.clog.CLog;
 
 public class AppException extends Exception implements UncaughtExceptionHandler {
 
@@ -151,7 +151,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        CLog.INSTANCE.log().e("uncaughtException",ex);
+        CLog.log().e("uncaughtException",ex);
         if (!handleException(ex) && mDefaultHandler != null) {
             mDefaultHandler.uncaughtException(thread, ex);
         }
@@ -168,7 +168,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
         if (ex == null) {
             return false;
         }
-        CLog.INSTANCE.log().e("",ex);
+        CLog.log().e("",ex);
         return true;
     }
 

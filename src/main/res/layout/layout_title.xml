@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/title_main"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:background="@color/app_theme_color">
+    android:layout_height="70dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,7 +21,8 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
-                android:paddingLeft="10dp"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
                 />
             <TextView
                 android:id="@+id/title_left_text"
@@ -52,6 +52,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:layout_marginRight="10dp"
             />
 
         <TextView

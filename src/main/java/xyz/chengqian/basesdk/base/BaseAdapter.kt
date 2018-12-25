@@ -2,7 +2,7 @@ package xyz.chengqian.basesdk.base
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import java.util.*
+import java.util.ArrayList
 
 
 /**
@@ -12,7 +12,7 @@ import java.util.*
  * @blog: https://blog.csdn.net/ch1406285246
  * modifyNote:
  */
-abstract class BaseAdapter<T, V : RecyclerView.ViewHolder>() : RecyclerView.Adapter<V>() {
+abstract class BaseAdapter<T, V : RecyclerView.ViewHolder>(private val noDataView:View?) : RecyclerView.Adapter<V>() {
 
     companion object {
         const val REFRESH = 20010
@@ -83,13 +83,19 @@ abstract class BaseAdapter<T, V : RecyclerView.ViewHolder>() : RecyclerView.Adap
      */
     fun getItem(position: Int) = data[position]
 
-    fun addData(dataList: List<T>) {
-        addData(dataList, REFRESH)
+    fun addData(dataList: List<T>,baseActivity: BaseActivity) {
+        addData(dataList, baseActivity.refreshType)
     }
 
-    fun addData(dataList: List<T>, refreshType: Int) {
-        if (refreshType == REFRESH)
+    private fun addData(dataList: List<T>, refreshType: Int) {
+        if (refreshType == REFRESH){
             this.data.clear()
+            if (dataList.isEmpty()&&noDataView!=null){
+                noDataView.visibility=View.VISIBLE
+            }else if (noDataView!=null){
+                noDataView.visibility=View.GONE
+            }
+        }
         this.data.addAll(dataList)
         notifyDataSetChanged()
     }

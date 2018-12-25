@@ -1,10 +1,8 @@
 package xyz.chengqian.basesdk.base
 
 import android.content.pm.ActivityInfo
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -16,14 +14,27 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import xyz.chengqian.basesdk.R
 import xyz.chengqian.basesdk.bean.event.DefaultEvent
-import xyz.chengqian.basesdk.showinfo.CLog
+import xyz.cq.clog.CLog
 
 abstract class BaseActivity : AppCompatActivity() {
+
+    companion object {
+
+    }
 
     private var isSetStatusBar = true//是否是透明状态栏
     private var isForeground = false
     var refreshType = BaseAdapter.REFRESH
-    var page = 1
+        set(value) {
+            field=value
+            if (refreshType==BaseAdapter.REFRESH){
+                pageNum=1
+            }else{
+                pageNum++
+            }
+        }
+    var pageNum = 1
+    var pageSize=15
 
     /**a
      * 两个参数的onCreate无法正常显示
@@ -42,9 +53,9 @@ abstract class BaseActivity : AppCompatActivity() {
         initViews(savedInstanceState)
         onClick()
         if (hasTitle()) {
-            CLog.logView().i("$localClassName-${title_left_text.text}")//流程统计
+            CLog.log("VIEW").i("$localClassName-${title_left_text.text}")//流程统计
         } else {
-            CLog.logView().i(localClassName)//流程统计
+            CLog.log("VIEW").i(localClassName)//流程统计
         }
         if (isSetStatusBar) {
             steepStatusBar();
@@ -91,9 +102,9 @@ abstract class BaseActivity : AppCompatActivity() {
     open fun onMessageReceive(message: DefaultEvent) {
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
+
 }
