@@ -93,7 +93,7 @@ object FileUtils {
     }
 
     fun getImagePath(path: String): String {
-        val path1 = File("$imagePath/$path")
+        val path1 = File("${getSDCardPath("Image")}/$path")
         if (!path1.exists()) {
             path1.createNewFile()
         }

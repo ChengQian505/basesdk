@@ -101,6 +101,8 @@
 -dontwarn javax.inject.**
 -dontwarn okhttp3.logging.**
 -keep class okhttp3.internal.**{*;}
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
 -dontwarn okio.**
 # Retrofit
 -dontwarn retrofit2.**
@@ -135,4 +137,5 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
-
+# 自身混淆
+-keep public class xyz.chengqian.basesdk.**{*;}

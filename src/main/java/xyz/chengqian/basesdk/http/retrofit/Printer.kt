@@ -34,45 +34,46 @@ open class Printer protected constructor() {
 
         fun printJsonRequest(builder: LoggingInterceptor.Builder, request: Request) {
             val requestBody = LINE_SEPARATOR + "Body:" + LINE_SEPARATOR + bodyToString(request)
-            val tag = builder.getTag(true)
-            CLog.log().i(tag, "┌────── Request ────────────────────────────────────────────────────────────────────────")
-            logLines(tag, arrayOf("URL: " + request.url()), false)
-            logLines(tag, getRequest(request), true)
-            logLines(tag, requestBody.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray(), true)
-            CLog.log().i(tag, "└───────────────────────────────────────────────────────────────────────────────────────")
+            val stringBuffer=StringBuffer()
+            stringBuffer.append("\n┌────── Request ────────────────────────────────────────────────────────────────────────")
+            logLines(stringBuffer, arrayOf("URL: " + request.url()), false)
+            logLines( stringBuffer,getRequest(request), true)
+            logLines(stringBuffer, requestBody.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray(), true)
+            stringBuffer.append("\n└───────────────────────────────────────────────────────────────────────────────────────")
+            CLog.log().i(builder.getTag(true),stringBuffer.toString())
         }
 
         fun printJsonResponse(builder: LoggingInterceptor.Builder, chainMs: Long, isSuccessful: Boolean, code: Int, headers: String, bodyString: String, segments: List<String>, message: String, responseUrl: String) {
             val responseBody = LINE_SEPARATOR + "Body:" + LINE_SEPARATOR + getJsonString(bodyString)
-            val tag = builder.getTag(false)
             val urlLine = arrayOf("URL: $responseUrl", "\n")
             val response = getResponse(headers, chainMs, code, isSuccessful, segments, message)
-            CLog.log().i(tag, "┌────── Response ───────────────────────────────────────────────────────────────────────")
-
-            logLines(tag, urlLine, true)
-            logLines(tag, response, true)
-            logLines(tag, responseBody.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray(), true)
-            CLog.log().i(tag, "└───────────────────────────────────────────────────────────────────────────────────────")
+            val stringBuffer=StringBuffer()
+            stringBuffer.append("\n┌────── Response ───────────────────────────────────────────────────────────────────────")
+            logLines( stringBuffer,urlLine, true)
+            logLines(stringBuffer, response, true)
+            logLines(stringBuffer, responseBody.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray(), true)
+            stringBuffer.append("\n└───────────────────────────────────────────────────────────────────────────────────────")
+            CLog.log().i(builder.getTag(true),stringBuffer.toString())
         }
 
         fun printFileRequest(builder: LoggingInterceptor.Builder, request: Request) {
-            val tag = builder.getTag(true)
-            CLog.log().i(tag, "┌────── Request ────────────────────────────────────────────────────────────────────────")
-
-            logLines(tag, arrayOf("URL: " + request.url()), false)
-            logLines(tag, getRequest(request), true)
-            logLines(tag, OMITTED_REQUEST, true)
-            CLog.log().i(tag, "└───────────────────────────────────────────────────────────────────────────────────────")
+            val stringBuffer=StringBuffer()
+            stringBuffer.append("\n┌────── Request ────────────────────────────────────────────────────────────────────────")
+            logLines( stringBuffer,arrayOf("URL: " + request.url()), false)
+            logLines( stringBuffer,getRequest(request), true)
+            logLines( stringBuffer,OMITTED_REQUEST, true)
+            stringBuffer.append("\n└───────────────────────────────────────────────────────────────────────────────────────")
+            CLog.log().i(builder.getTag(true),stringBuffer.toString())
         }
 
         fun printFileResponse(builder: LoggingInterceptor.Builder, chainMs: Long, isSuccessful: Boolean, code: Int, headers: String, segments: List<String>, message: String) {
-            val tag = builder.getTag(false)
-            CLog.log().i(tag, "┌────── Response ───────────────────────────────────────────────────────────────────────")
+            val stringBuffer=StringBuffer()
+            stringBuffer.append("\n┌────── Response ───────────────────────────────────────────────────────────────────────")
 
-            logLines(tag, getResponse(headers, chainMs, code, isSuccessful, segments, message), true)
-            logLines(tag, OMITTED_RESPONSE, true)
-            CLog.log().i(tag, "└───────────────────────────────────────────────────────────────────────────────────────")
-
+            logLines( stringBuffer,getResponse(headers, chainMs, code, isSuccessful, segments, message), true)
+            logLines( stringBuffer,OMITTED_RESPONSE, true)
+            stringBuffer.append("\n└───────────────────────────────────────────────────────────────────────────────────────")
+            CLog.log().i(builder.getTag(true),stringBuffer.toString())
         }
 
         private fun getRequest(request: Request): Array<String> {
@@ -104,12 +105,10 @@ open class Printer protected constructor() {
             var tag = "─ "
             if (headers.size > 1) {
                 for (i in headers.indices) {
-                    if (i == 0) {
-                        tag = "┌ "
-                    } else if (i == headers.size - 1) {
-                        tag = "└ "
-                    } else {
-                        tag = "├ "
+                    tag = when (i) {
+                        0 -> "┌ "
+                        headers.size - 1 -> "└ "
+                        else -> "├ "
                     }
 
                     builder.append(tag).append(headers[i]).append("\n")
@@ -126,9 +125,8 @@ open class Printer protected constructor() {
             return builder.toString()
         }
 
-        private fun logLines(tag: String, lines: Array<String>, withLineSize: Boolean) {
+        private fun logLines(stringBuffer: StringBuffer, lines: Array<String>, withLineSize: Boolean){
             val var7 = lines.size
-
             for (var8 in 0 until var7) {
                 val line = lines[var8]
                 val lineLength = line.length
@@ -138,10 +136,9 @@ open class Printer protected constructor() {
                     val start = i * MAX_LONG_SIZE
                     var end = (i + 1) * MAX_LONG_SIZE
                     end = if (end > line.length) line.length else end
-                    CLog.log().i(tag, "│ " + line.substring(start, end))
+                    stringBuffer.append("\n"+"│ " + line.substring(start, end))
                 }
             }
-
         }
 
         private fun bodyToString(request: Request): String {

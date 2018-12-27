@@ -105,6 +105,7 @@ class LoggingInterceptor(private val builder: LoggingInterceptor.Builder) : Inte
     class Builder {
         val headers: HashMap<String, String> = HashMap()
         val httpUrl: HashMap<String, String> = HashMap()
+        private var isDebug: Boolean = false
         private var requestTag = ""
         private var responseTag = ""
         internal var executor: Executor? = null
@@ -140,6 +141,11 @@ class LoggingInterceptor(private val builder: LoggingInterceptor.Builder) : Inte
 
         fun response(tag: String): LoggingInterceptor.Builder {
             this.responseTag = tag
+            return this
+        }
+
+        fun loggable(isDebug: Boolean): LoggingInterceptor.Builder {
+            this.isDebug = isDebug
             return this
         }
 

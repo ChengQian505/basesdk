@@ -24,6 +24,6 @@
         android:gravity="center"
         android:text="取消"
         android:textColor="#5CACEE"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 </LinearLayout>

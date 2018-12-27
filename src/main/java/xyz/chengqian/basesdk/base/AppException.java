@@ -1,6 +1,7 @@
 package xyz.chengqian.basesdk.base;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -151,6 +152,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
+        Log.e("CLOG/uncaughtException","",ex);
         CLog.log().e("uncaughtException",ex);
         if (!handleException(ex) && mDefaultHandler != null) {
             mDefaultHandler.uncaughtException(thread, ex);
@@ -168,6 +170,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
         if (ex == null) {
             return false;
         }
+        Log.e("CLOG/","",ex);
         CLog.log().e("",ex);
         return true;
     }

@@ -15,7 +15,7 @@ public class MD5Utils {
      * @return String encrypt result string
      * @throws NoSuchAlgorithmException
      * */
-    public static final String MD5_32bit(String readyEncryptStr) throws NoSuchAlgorithmException{
+    private static String md5_32(String readyEncryptStr) throws NoSuchAlgorithmException{
         char hexDigits[] = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
         };
@@ -31,8 +31,7 @@ public class MD5Utils {
             int j = md.length;
             char str[] = new char[j * 2];
             int k = 0;
-            for (int i = 0; i < j; i++) {
-                byte byte0 = md[i];
+            for (byte byte0 : md) {
                 str[k++] = hexDigits[byte0 >>> 4 & 0xf];
                 str[k++] = hexDigits[byte0 & 0xf];
             }
@@ -41,11 +40,11 @@ public class MD5Utils {
             return null;
         }
     }
-    /**
-     * @Description:加密-16位小写
-     */
-    public static String MD5_16bit(String encryptStr) throws NoSuchAlgorithmException {
-        return MD5_32bit(encryptStr).substring(8, 24).toLowerCase();
+    public static String md5Lower16(String encryptStr) throws NoSuchAlgorithmException {
+        return md5_32(encryptStr).substring(8, 24).toLowerCase();
+    }
+    public static String md5Lower32(String encryptStr) throws NoSuchAlgorithmException {
+        return md5_32(encryptStr).toLowerCase();
     }
 
 }
