@@ -83,11 +83,11 @@ abstract class BaseAdapter<T, V : RecyclerView.ViewHolder>(private val noDataVie
      */
     fun getItem(position: Int) = data[position]
 
-    fun addData(dataList: List<T>,baseActivity: BaseActivity) {
+    fun addData(dataList: List<T>,baseActivity: AbstractActivity) {
         addData(dataList, baseActivity.refreshType)
     }
 
-    private fun addData(dataList: List<T>, refreshType: Int) {
+    fun addData(dataList: List<T>, refreshType: Int) {
         if (refreshType == REFRESH){
             this.data.clear()
             if (dataList.isEmpty()&&noDataView!=null){

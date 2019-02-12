@@ -7,56 +7,38 @@ import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
-import kotlinx.android.synthetic.main.layout_base.*
-import kotlinx.android.synthetic.main.layout_title.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import xyz.chengqian.basesdk.R
 import xyz.chengqian.basesdk.bean.event.DefaultEvent
 import xyz.cq.clog.CLog
 
-abstract class BaseActivity : AppCompatActivity() {
-
-    companion object {
-
-    }
+abstract class AbstractActivity : AppCompatActivity() {
 
     private var isSetStatusBar = true//是否是透明状态栏
     private var isForeground = false
     var refreshType = BaseAdapter.REFRESH
         set(value) {
-            field=value
-            if (refreshType==BaseAdapter.REFRESH){
-                pageNum=1
-            }else{
+            field = value
+            if (refreshType == BaseAdapter.REFRESH) {
+                pageNum = 1
+            } else {
                 pageNum++
             }
         }
     var pageNum = 1
-    var pageSize=15
+    var pageSize = 15
 
     /**a
      * 两个参数的onCreate无法正常显示
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_base)
+        setContentView(bindBaseViewId())
         EventBus.getDefault().register(this)
-        if (hasTitle()) {
-            layoutInflater.inflate(R.layout.layout_title, layout_base)
-            title_left_line.setOnClickListener {
-                finish()
-            }
-        }
-        layoutInflater.inflate(bindLayoutId(), layout_base)
         initViews(savedInstanceState)
         onClick()
-        if (hasTitle()) {
-            CLog.log("VIEW").i("$localClassName-${title_left_text.text}")//流程统计
-        } else {
-            CLog.log("VIEW").i(localClassName)//流程统计
-        }
+        CLog.log("VIEW").i(localClassName)//流程统计
         if (isSetStatusBar) {
             steepStatusBar();
         }
@@ -66,11 +48,11 @@ abstract class BaseActivity : AppCompatActivity() {
     //设置Title的显示
     open fun hasTitle() = true
 
-    //设置截屏反馈的显示
-    open fun isScreenFeedBack() = true
-
     @LayoutRes
     protected abstract fun bindLayoutId(): Int //加载布局
+
+    @LayoutRes
+    protected abstract fun bindBaseViewId(): Int //日常布局
 
     protected abstract fun initViews(savedInstanceState: Bundle?)
 
@@ -88,13 +70,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        base_feedback_line.visibility = View.GONE
         isForeground = true
     }
 
     override fun onPause() {
         super.onPause()
-        base_feedback_line.visibility = View.GONE
         isForeground = false
     }
 
