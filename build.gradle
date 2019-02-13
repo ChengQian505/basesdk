@@ -1,12 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+def verCode=17
+def verName="1.1.0.1"
 android {
     compileSdkVersion 26
     defaultConfig {
         minSdkVersion 15
-        versionCode 1
-        versionName "1.0"
+        versionCode verCode
+        versionName verName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -47,7 +49,7 @@ publish{
     userOrg = 'chengqian'//bintray.com的用户名
     groupId = 'xyz.cq.base'//jcenter上的路径
     artifactId = 'sdk'//项目名称bintray.apikey=fa90e8a7d75531eb30e090873c7a2ef982060421
-    publishVersion = '1.0.14'//版本号
+    publishVersion = verName//版本号
     desc = '公用类'//描述，不重要
     website = siteUrl//项目主页
 }

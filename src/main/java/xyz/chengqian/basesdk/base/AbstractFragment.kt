@@ -20,17 +20,16 @@ import xyz.cq.clog.CLog
 
 abstract class AbstractFragment : Fragment() {
     protected var isSetStatusBar = true//是否是透明状态栏
-    var page = 0
     /** 是否禁止旋转屏幕  */
     var refreshType = BaseAdapter.REFRESH
         set(value) {
             field = value
             when (refreshType) {
                 BaseAdapter.REFRESH -> {
-                    page = 0
+                    pageNum = 0
                 }
                 BaseAdapter.LOAD_MORE -> {
-                    page++
+                    pageNum++
                 }
             }
         }
