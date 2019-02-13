@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -15,8 +16,17 @@ import xyz.cq.clog.CLog
 
 abstract class AbstractActivity : AppCompatActivity() {
 
-    private var isSetStatusBar = true//是否是透明状态栏
-    private var isForeground = false
+    var isSetStatusBar = true//是否是透明状态栏
+    /**
+     * Activity是否处于前台
+     */
+    var isForeground = false
+        private set
+    /**
+     * 当前刷新类型 有刷新和加载两种
+     * @see BaseAdapter.REFRESH  刷新取值
+     * @see BaseAdapter.LOAD_MORE 加载取值
+     */
     var refreshType = BaseAdapter.REFRESH
         set(value) {
             field = value
@@ -26,15 +36,26 @@ abstract class AbstractActivity : AppCompatActivity() {
                 pageNum++
             }
         }
+    /**
+     * 第几页
+     */
     var pageNum = 1
+    /**
+     * 每一页的数量
+     */
     var pageSize = 15
 
-    /**a
+    /**
+     * 注册EventBus和布局的逻辑，透明状态栏
      * 两个参数的onCreate无法正常显示
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(bindBaseViewId())
+        setContentView(bindBaseView())
+        if (hasTitle()) {
+            layoutInflater.inflate(bindTitleViewId(), bindViewGroup())
+        }
+        layoutInflater.inflate(bindLayoutId(), bindViewGroup())
         EventBus.getDefault().register(this)
         initViews(savedInstanceState)
         onClick()
@@ -45,17 +66,42 @@ abstract class AbstractActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
-    //设置Title的显示
+    /**
+     * 标题布局
+     */
+    @LayoutRes
+    protected abstract fun bindTitleViewId(): Int
+
+    /**
+     * 父布局
+     */
+    protected abstract fun bindBaseView(): View
+
+    /**
+     * 子布局
+     */
+    @LayoutRes
+    protected abstract fun bindLayoutId(): Int
+
+    /**
+     * 位于父布局的父控件用于承载子布局
+     */
+    protected abstract fun bindViewGroup(): ViewGroup
+
+
+    /**
+     *  Title是否显示,默认显示，false为不显示
+     */
     open fun hasTitle() = true
 
-    @LayoutRes
-    protected abstract fun bindLayoutId(): Int //加载布局
-
-    @LayoutRes
-    protected abstract fun bindBaseViewId(): Int //日常布局
-
+    /**
+     * 初始化view
+     */
     protected abstract fun initViews(savedInstanceState: Bundle?)
 
+    /**
+     * 初始化控件的点击事件
+     */
     protected abstract fun onClick()
 
 

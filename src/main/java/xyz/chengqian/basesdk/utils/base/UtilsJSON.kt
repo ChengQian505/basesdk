@@ -12,9 +12,9 @@ import java.io.IOException
  * content :
  */
 
-object JSONUtils {
+object UtilsJSON {
 
-    private const val TAG = "JSONUtils"
+    private const val TAG = "UtilsJSON"
 
     private val mapper = ObjectMapper()
 

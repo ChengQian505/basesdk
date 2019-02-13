@@ -3,7 +3,7 @@ package xyz.chengqian.basesdk.utils.base
 import android.text.TextUtils
 import xyz.cq.clog.CLog
 
-object RegUtils{
+object UtilsReg{
     fun isMobile(mobiles: String): Boolean {
         /*
          * 移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188

@@ -17,11 +17,11 @@ import java.text.DecimalFormat
  * modifyNote:
  */
 @SuppressLint("StaticFieldLeak")
-object FileUtils {
+object UtilsFile {
     var context: Context? = null
         set(value) {
             field = value
-            CLog.log().i("FileUtils init")
+            CLog.log().i("UtilsFile init")
         }
 
     private fun fileDir(): String {

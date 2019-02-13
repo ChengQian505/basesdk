@@ -18,7 +18,7 @@ import xyz.chengqian.basesdk.utils.glide.GlideCircleTransform
  * content:
  * modifyNote:
  */
-object GlideUtils {
+object UtilsGlide {
 
     fun loadCircle(context: Activity, imageUrl: String, view: ImageView) {
         Glide.with(context).load(imageUrl).apply(RequestOptions().transform(GlideCircleTransform(context))).into(view)

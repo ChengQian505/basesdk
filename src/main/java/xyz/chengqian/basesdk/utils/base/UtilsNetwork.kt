@@ -10,7 +10,7 @@ import xyz.cq.clog.CLog
  * author:qian.cheng
  */
 @SuppressLint("StaticFieldLeak")
-object NetworkUtils {
+object UtilsNetwork {
 
     var context: Context? = null
         get() {
@@ -22,7 +22,7 @@ object NetworkUtils {
         }
         set(value) {
             field=value
-            CLog.log().i("NetworkUtils init")
+            CLog.log().i("UtilsNetwork init")
         }
 
     private const val NETWORK_OK = 0//网络正常

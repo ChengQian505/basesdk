@@ -3,7 +3,7 @@ package xyz.chengqian.basesdk.http.retrofit
 import android.content.Context
 import com.fasterxml.jackson.databind.JsonNode
 import xyz.chengqian.basesdk.http.callback.CallBack
-import xyz.chengqian.basesdk.utils.base.NetworkUtils
+import xyz.chengqian.basesdk.utils.base.UtilsNetwork
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
@@ -19,7 +19,7 @@ abstract class IRetrofit {
 
     fun doRequestByRxRetrofit(callback: CallBack, vararg args: Any) {
         if (null != toastContext()) {
-            if (!NetworkUtils.netWorkToast(toastContext()!!)) {
+            if (!UtilsNetwork.netWorkToast(toastContext()!!)) {
                 return
             }
         }

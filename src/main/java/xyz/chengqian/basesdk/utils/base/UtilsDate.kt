@@ -14,7 +14,7 @@ import java.util.Locale
  * Created by chenAstro 2017/9/26.
  */
 
-object DateUtils {
+object UtilsDate {
 
 
     fun getDate(date: Date): String {

@@ -20,7 +20,7 @@ import java.io.IOException;
  * content:
  * modifyNote:
  */
-public class SystemUtils {
+public class UtilsSystem {
 
     public static DisplayMetrics getWindowDisplayMetrics(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

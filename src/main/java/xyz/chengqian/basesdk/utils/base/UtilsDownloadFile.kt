@@ -12,9 +12,9 @@ import java.io.InputStream
  * 2018/3/20
  * 描述
  */
-object DownloadFileUtils {
+object UtilsDownloadFile {
 
-    private const val TAG = "DownloadFileUtils"
+    private const val TAG = "UtilsDownloadFile"
 
     private val okHttpClient = OkHttpClient()
 
@@ -100,7 +100,7 @@ object DownloadFileUtils {
                         listener.onDownloading(progress)
                     }
                     fileOutputStream.flush()
-                    CLog.log().i(DownloadFileUtils::class.java, "$tag-下载成功 $url \n 文件地址：$filePath")
+                    CLog.log().i(UtilsDownloadFile::class.java, "$tag-下载成功 $url \n 文件地址：$filePath")
                     // 下载完成
                     listener.onDownloadSuccess()
                 } catch (e: Exception) {

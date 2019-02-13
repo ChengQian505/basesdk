@@ -15,7 +15,7 @@ import android.provider.MediaStore;
  * content:
  * modifyNote:
  */
-public class RealPathFromUriUtils {
+public class UtilsRealPathFromUri {
     /**
      * 根据Uri获取图片的绝对路径
      *

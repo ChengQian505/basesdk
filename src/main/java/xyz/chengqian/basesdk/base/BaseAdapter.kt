@@ -83,8 +83,12 @@ abstract class BaseAdapter<T, V : RecyclerView.ViewHolder>(private val noDataVie
      */
     fun getItem(position: Int) = data[position]
 
-    fun addData(dataList: List<T>,baseActivity: AbstractActivity) {
-        addData(dataList, baseActivity.refreshType)
+    fun addData(dataList: List<T>,abstractActivity: AbstractActivity) {
+        addData(dataList, abstractActivity.refreshType)
+    }
+
+    fun addData(dataList: List<T>,abstractFragment: AbstractFragment) {
+        addData(dataList, abstractFragment.refreshType)
     }
 
     fun addData(dataList: List<T>, refreshType: Int) {

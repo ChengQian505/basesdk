@@ -35,6 +35,15 @@ abstract class AbstractFragment : Fragment() {
             }
         }
 
+    /**
+     * 第几页
+     */
+    var pageNum = 1
+    /**
+     * 每一页的数量
+     */
+    var pageSize = 15
+
     //设置Title的显示
     open fun hasTitle() = false
 
@@ -53,9 +62,6 @@ abstract class AbstractFragment : Fragment() {
     private var isViewPrepare = false
 
     var refresh = true
-
-
-
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)

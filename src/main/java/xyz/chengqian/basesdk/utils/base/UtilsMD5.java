@@ -3,7 +3,7 @@ package xyz.chengqian.basesdk.utils.base;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MD5Utils {
+public class UtilsMD5 {
     /**Determine encrypt algorithm MD5*/
     private static final String ALGORITHM_MD5 = "MD5";
     /**UTF-8 Encoding*/

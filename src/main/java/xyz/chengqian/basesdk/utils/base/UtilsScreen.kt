@@ -13,7 +13,7 @@ import xyz.cq.clog.CLog
  * content:
  * modifyNote:
  */
-object ScreenUtils {
+object UtilsScreen {
     fun property(context: Context) {
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val dm = DisplayMetrics()
