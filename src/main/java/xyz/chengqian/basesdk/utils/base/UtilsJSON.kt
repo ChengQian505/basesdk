@@ -14,7 +14,6 @@ import java.io.IOException
 
 object UtilsJSON {
 
-    private const val TAG = "UtilsJSON"
 
     private val mapper = ObjectMapper()
 
@@ -24,23 +23,11 @@ object UtilsJSON {
     }
 
     fun toJsonString(obj: Any): String {
-        try {
-            return mapper.writeValueAsString(obj)
-        } catch (e: Exception) {
-            CLog.log(TAG).e("解析异常", e)
-            throw e
-        }
-
+        return mapper.writeValueAsString(obj)
     }
 
     @Throws(IOException::class)
     fun <T> parse(json: String, c: Class<T>): T {
-        try {
-            return mapper.readValue(json, c)
-        } catch (e: Exception) {
-            CLog.log(TAG).e("解析异常", e)
-            throw e
-        }
-
+        return mapper.readValue(json, c)
     }
 }

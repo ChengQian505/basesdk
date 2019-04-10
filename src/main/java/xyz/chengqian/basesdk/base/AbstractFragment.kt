@@ -2,9 +2,10 @@ package xyz.chengqian.basesdk.base
 
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -18,7 +19,8 @@ import xyz.cq.clog.CLog
  * content :
  */
 
-abstract class AbstractFragment : Fragment() {
+abstract class AbstractFragment : Fragment(),IView {
+
     protected var isSetStatusBar = true//是否是透明状态栏
     /** 是否禁止旋转屏幕  */
     var refreshType = BaseAdapter.REFRESH
@@ -34,18 +36,6 @@ abstract class AbstractFragment : Fragment() {
             }
         }
 
-    /**
-     * 第几页
-     */
-    var pageNum = 1
-    /**
-     * 每一页的数量
-     */
-    var pageSize = 15
-
-    //设置Title的显示
-    open fun hasTitle() = false
-
 
     protected fun steepStatusBar() {//[沉浸状态栏]
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -60,8 +50,6 @@ abstract class AbstractFragment : Fragment() {
      */
     private var isViewPrepare = false
 
-    var refresh = true
-
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
@@ -70,12 +58,27 @@ abstract class AbstractFragment : Fragment() {
         lazyLoadDataIfPrepared()
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val view = inflater.inflate(bindParentViewId(), null)
+        EventBus.getDefault().register(this)
+        CLog.log("VIEW").i("${javaClass.name} Create")//流程统计
+        if (isSetStatusBar) {
+            steepStatusBar();
+        }
+        return view
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isViewPrepare = true
-        initView()
-        setOnclick()
+        initViews(view,savedInstanceState)
+        onClick()
     }
+
+    /**
+     * 初始化view
+     */
+    protected abstract fun initViews(view: View,savedInstanceState: Bundle?)
 
     private fun lazyLoadDataIfPrepared() {
         load()
@@ -85,20 +88,6 @@ abstract class AbstractFragment : Fragment() {
         lazyLoadDataIfPrepared()
     }
 
-
-    /**
-     * 加载布局
-     */
-    @LayoutRes
-    abstract fun bindLayoutId(): Int
-
-    /**
-     * 初始化 ViewI
-     */
-    abstract fun initView()
-
-
-    abstract fun setOnclick()
     /**
      * 懒加载
      */
