@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import xyz.cq.clog.CLog
 
 /**
@@ -22,7 +23,7 @@ object UtilsNetwork {
             }
         }
         set(value) {
-            field=value
+            field = value
             CLog.log().i("UtilsNetwork init")
         }
 
@@ -42,7 +43,7 @@ object UtilsNetwork {
         get() {
             val cm = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = cm.activeNetworkInfo
-            return if (networkInfo != null && networkInfo.isConnected && networkInfo.isAvailable&&isNetSystemUsable(context!!))
+            return if (networkInfo != null && networkInfo.isConnected && networkInfo.isAvailable && (Build.VERSION_CODES.KITKAT < 23 || isNetSystemUsable(context!!)))
                 NETWORK_OK
             else if (networkInfo != null && !networkInfo.isConnected)
                 NETWORK_UNCONNECTED
@@ -72,9 +73,7 @@ object UtilsNetwork {
      * @return true可用 false不可用
      */
     fun checkNetWork(): Boolean {
-        val cm = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = cm.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected && networkInfo.isAvailable
+        return if (netWorkState == NETWORK_OK) true else false
     }
 
     /**
@@ -85,15 +84,15 @@ object UtilsNetwork {
         return when (netWorkState) {
             NETWORK_OK -> true
             NETWORK_UNCONNECTED -> {
-                CLog.show(context,action_network_error_toast)
+                CLog.show(context, action_network_error_toast)
                 false
             }
             NETWORK_BAD -> {
-                CLog.show(context,action_network_error_toast)
+                CLog.show(context, action_network_error_toast)
                 false
             }
             else -> {
-                CLog.show(context,action_network_error_toast)
+                CLog.show(context, action_network_error_toast)
                 false
             }
         }
@@ -105,11 +104,11 @@ object UtilsNetwork {
      * @param context
      * @return
      */
-    fun isNetSystemUsable(context:Context):Boolean{
+    fun isNetSystemUsable(context: Context): Boolean {
         var isNetUsable = false
         val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            val networkCapabilities =manager.getNetworkCapabilities(manager.activeNetwork);
+            val networkCapabilities = manager.getNetworkCapabilities(manager.activeNetwork);
             isNetUsable = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
         }
         return isNetUsable;
@@ -125,7 +124,7 @@ object UtilsNetwork {
             NETWORK_UNCONNECTED -> {
                 try {
                     CLog.show(action_network_error_toast)
-                }catch (e:IllegalArgumentException){
+                } catch (e: IllegalArgumentException) {
                     throw java.lang.IllegalArgumentException("请先调用BaseSDK.init(context:Context)方法或使用netWorkToast(context:Context)方法")
                 }
                 false
@@ -133,7 +132,7 @@ object UtilsNetwork {
             NETWORK_BAD -> {
                 try {
                     CLog.show(action_network_error_toast)
-                }catch (e:IllegalArgumentException){
+                } catch (e: IllegalArgumentException) {
                     throw java.lang.IllegalArgumentException("请先调用BaseSDK.init(context:Context)方法或使用netWorkToast(context:Context)方法")
                 }
                 false
@@ -141,7 +140,7 @@ object UtilsNetwork {
             else -> {
                 try {
                     CLog.show(action_network_error_toast)
-                }catch (e:IllegalArgumentException){
+                } catch (e: IllegalArgumentException) {
                     throw java.lang.IllegalArgumentException("请先调用BaseSDK.init(context:Context)方法或使用netWorkToast(context:Context)方法")
                 }
                 false
@@ -149,6 +148,6 @@ object UtilsNetwork {
         }
     }
 
-    private const val action_network_error_toast="网络异常,请检查网络连接"
+    private const val action_network_error_toast = "网络异常,请检查网络连接"
 
 }

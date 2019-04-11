@@ -5,6 +5,7 @@ import xyz.chengqian.basesdk.utils.base.UtilsFile
 import xyz.chengqian.basesdk.utils.base.UtilsNetwork
 import xyz.chengqian.basesdk.utils.base.Utils
 import xyz.cq.clog.CLog
+import xyz.cq.clog.log.MLog
 
 /**
  * @author 程前 created on 2018/11/29.
@@ -13,12 +14,22 @@ import xyz.cq.clog.CLog
  * modifyNote:
  */
 object BaseSDK {
-    fun init(context: Context,isLog:Boolean) {
+
+    fun init(context: Context): BaseSDK {
+        UtilsFile.context = context
+        CLog.INSTANCE.context(context).isLog(true).logFile(UtilsFile.logPath())
         //App异常崩溃处理器
         Thread.setDefaultUncaughtExceptionHandler(AppException.getAppExceptionHandler())
         Utils.context = context
-        UtilsFile.context = context
         UtilsNetwork.context = context
-        CLog.INSTANCE.context(context).isLog(isLog).logFile(UtilsFile.logPath())
+        return this
     }
+
+    fun baseLog(baseLog: String): BaseSDK {
+        CLog.INSTANCE.baseLog(baseLog)
+        return this
+    }
+
+    fun baseLog() = MLog.BASE_TAG
+
 }
