@@ -1,10 +1,14 @@
 
-# This is a configuration file for ProGuard.
-# http://proguard.sourceforge.net/index.html#manual/usage.html
-#
-# Starting with version 2.2 of the Android plugin for Gradle, these files are no longer used. Newer
-# versions are distributed with the plugin and unpacked at build time. Files in this directory are
-# no longer maintained.
+#-libraryjars class_path //应用的依赖包，如Android-support-v4
+#-keep [,modifier,...] class_specification //这里的keep就是保持的意思，意味着不混淆某些类
+#-keepclassmembers [,modifier,...] class_specification //同样的保持，不混淆类的成员
+#-keepclasseswithmembers [,modifier,...] class_specification //不混淆类及其成员
+#-keepnames class_specification //不混淆类及其成员名
+#-keepclassmembernames class_specification //不混淆类的成员名
+#-keepclasseswithmembernames class_specification //不混淆类及其成员名
+#-assumenosideeffects class_specification //假设调用不产生任何影响，在proguard代码优化时会将该调用remove掉。如system.out.println和Log.v等等
+#-dontwarn [class_filter] //不提示warnning
+
 #表示混淆时不使用大小写混合类名
 -dontusemixedcaseclassnames
 #表示不跳过library中的非public的类

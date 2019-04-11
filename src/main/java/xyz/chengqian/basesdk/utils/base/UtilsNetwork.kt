@@ -3,6 +3,7 @@ package xyz.chengqian.basesdk.utils.base
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import xyz.cq.clog.CLog
 
 /**
@@ -41,13 +42,14 @@ object UtilsNetwork {
         get() {
             val cm = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = cm.activeNetworkInfo
-            return if (networkInfo != null && networkInfo.isConnected && networkInfo.isAvailable)
+            return if (networkInfo != null && networkInfo.isConnected && networkInfo.isAvailable&&isNetSystemUsable(context!!))
                 NETWORK_OK
             else if (networkInfo != null && !networkInfo.isConnected)
                 NETWORK_UNCONNECTED
             else
                 NETWORK_BAD
         }
+
 
     /**
      * 获取网络类型
@@ -96,6 +98,23 @@ object UtilsNetwork {
             }
         }
     }
+
+    /**
+     * 判断当前网络是否可用(6.0以上版本)
+     * 实时
+     * @param context
+     * @return
+     */
+    fun isNetSystemUsable(context:Context):Boolean{
+        var isNetUsable = false
+        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            val networkCapabilities =manager.getNetworkCapabilities(manager.activeNetwork);
+            isNetUsable = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+        }
+        return isNetUsable;
+    }
+
     /**
      * 检查网络无网络进行toast
      * @return true为网络正常,false为网络不正常
