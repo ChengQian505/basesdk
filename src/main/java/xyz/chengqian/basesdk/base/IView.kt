@@ -35,11 +35,6 @@ interface IView {
     @LayoutRes
     fun bindBaseViewId():Int
 
-    /**
-     * 位于父布局的父控件用于承载子布局
-     */
-    fun bindViewGroup(): ViewGroup
-
 
     /**
      * 初始化控件的点击事件

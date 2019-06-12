@@ -12,14 +12,15 @@ import java.util.ArrayList
  * @blog: https://blog.csdn.net/ch1406285246
  * modifyNote:
  */
-abstract class BaseAdapter<T, V : RecyclerView.ViewHolder>(private val noDataView:View?) : RecyclerView.Adapter<V>() {
+abstract class BaseAdapter<T, V : RecyclerView.ViewHolder>(private val noDataView: View?) : RecyclerView.Adapter<V>() {
 
     companion object {
         const val REFRESH = 20010
         const val LOAD_MORE = 20011
     }
 
-    private var data = ArrayList<T>()
+    var data = ArrayList<T>()
+        private set
     /**
      * onClick onLongClick callback
      */
@@ -83,21 +84,21 @@ abstract class BaseAdapter<T, V : RecyclerView.ViewHolder>(private val noDataVie
      */
     fun getItem(position: Int) = data[position]
 
-    fun addData(dataList: List<T>,abstractActivity: AbstractActivity) {
+    fun addData(dataList: List<T>, abstractActivity: AbstractActivity) {
         addData(dataList, abstractActivity.refreshType)
     }
 
-    fun addData(dataList: List<T>,abstractFragment: AbstractFragment) {
+    fun addData(dataList: List<T>, abstractFragment: AbstractFragment) {
         addData(dataList, abstractFragment.refreshType)
     }
 
     fun addData(dataList: List<T>, refreshType: Int) {
-        if (refreshType == REFRESH){
+        if (refreshType == REFRESH) {
             this.data.clear()
-            if (dataList.isEmpty()&&noDataView!=null){
-                noDataView.visibility=View.VISIBLE
-            }else if (noDataView!=null){
-                noDataView.visibility=View.GONE
+            if (dataList.isEmpty() && noDataView != null) {
+                noDataView.visibility = View.VISIBLE
+            } else if (noDataView != null) {
+                noDataView.visibility = View.GONE
             }
         }
         this.data.addAll(dataList)

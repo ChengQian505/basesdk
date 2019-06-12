@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.ViewGroup
 import android.view.WindowManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -91,5 +92,10 @@ abstract class AbstractActivity : AppCompatActivity(),IView {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
+
+    /**
+     * 位于父布局的父控件用于承载子布局
+     */
+    abstract fun bindViewGroup(): ViewGroup
 
 }

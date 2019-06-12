@@ -99,4 +99,47 @@ object UtilsReg{
         }
         return matches;
     }
+
+    /**
+     * 校验银行卡卡号
+     * @param cardId
+     * @return
+     */
+    fun isBankCard(cardId: String): Boolean {
+        if(cardId.length < 15 || cardId.length > 19) {
+            return false;
+        }
+        val bit = getBankCardCheckCode(cardId.substring(0, cardId.length - 1))
+        return if (bit == 'N') {
+            false
+        } else cardId[cardId.length - 1] == bit
+    }
+
+    /**
+     * 从不含校验位的银行卡卡号采用 Luhm 校验算法获得校验位
+     * @param nonCheckCodeCardId
+     * @return
+     */
+    fun getBankCardCheckCode(nonCheckCodeCardId: String?): Char {
+        if (nonCheckCodeCardId == null || nonCheckCodeCardId.trim { it <= ' ' }.length == 0
+                || !nonCheckCodeCardId.matches("\\d+".toRegex())) {
+            //如果传的不是数据返回N
+            return 'N'
+        }
+        val chs = nonCheckCodeCardId.trim { it <= ' ' }.toCharArray()
+        var luhmSum = 0
+        var i = chs.size - 1
+        var j = 0
+        while (i >= 0) {
+            var k = chs[i] - '0'
+            if (j % 2 == 0) {
+                k *= 2
+                k = k / 10 + k % 10
+            }
+            luhmSum += k
+            i--
+            j++
+        }
+        return if (luhmSum % 10 == 0) '0' else (10 - luhmSum % 10 + '0'.toInt()).toChar()
+    }
 }
